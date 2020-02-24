@@ -1,0 +1,12 @@
+{
+  "name": "com.seb.tachyon.client",
+  "version": "0.2.1",
+  "displayName": "Tachyon Client",
+  "type": "library",
+  "unity": "2019.3",
+  "description": "Unity client integration for the Tachyon protocol.",
+  "dependencies": {
+    "com.seb.coroutiner": "0.0.1",
+    "com.seb.tachyon.common" : "0.0.1"
+  }
+}

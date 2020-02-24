@@ -1,0 +1,16 @@
+{
+    "name": "Tachyon.Client",
+    "references": [
+        "Coroutiner",
+        "Tachyon.Common"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
