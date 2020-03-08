@@ -11,12 +11,13 @@ namespace TachyonIO {
 
         public event ConnectionEvent OnDisconnected;
         public event ConnectionEvent OnConnected;
-        public event ConnectionEvent OnFailedToConnect;
+        public event FailedConnectionEvent OnFailedToConnect;
 
-        bool _disconnectTriggered, 
-            _connectedTriggered, 
-            _failedToConnectTriggered;
-
+        private bool 
+            _disconnectTriggered,
+            _connectedTriggered;
+        private ConnectionFailedException _connectionFailedException;
+        
         Client _client;
 
         Queue<byte[]> _recievedQueue = new Queue<byte[]>(); 
@@ -34,9 +35,9 @@ namespace TachyonIO {
                     _connectedTriggered = false;
                 }
 
-                if (_failedToConnectTriggered) {
-                    OnFailedToConnect?.Invoke();
-                    _failedToConnectTriggered = false;
+                if (_connectionFailedException != null) {
+                    OnFailedToConnect?.Invoke(_connectionFailedException);
+                    _connectionFailedException = null;
                 }
                 
                 while (_recievedQueue.Count > 0) {
@@ -54,12 +55,14 @@ namespace TachyonIO {
 
             _client = new Client();
 
-            _client.OnConnected += () => _connectedTriggered = true;
-            _client.OnDisconnected += () => _disconnectTriggered = true;
-            _client.OnFailedToConnect += () => _failedToConnectTriggered = true;
-            _client.OnRecieved += (message) => {
+            _client.OnConnected += () => 
+                _connectedTriggered = true;
+            _client.OnDisconnected += () => 
+                _disconnectTriggered = true;
+            _client.OnFailedToConnect += (ex) =>
+                _connectionFailedException = ex;
+            _client.OnRecieved += (message) => 
                 _recievedQueue.Enqueue(message);
-            };
 
             UnityEngine.Debug.Log("Connecting");
             _client.Connect(host, port);
